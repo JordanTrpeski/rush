@@ -5,9 +5,11 @@ module.exports = {
   ],
   theme: {
     extend: {
-      logo: ["Princess Sofia", "serif"],
-      sans: ["Raleway", "sans-serif"],
-      price: ["Roboto", "sans-serif"]
+      fontFamily: {
+        logo: ["Princess Sofia", "serif"],
+        sans: ["Raleway", "sans-serif"],
+        price: ["Roboto", "sans-serif"]  
+      }
     },
   },
   plugins: [],
