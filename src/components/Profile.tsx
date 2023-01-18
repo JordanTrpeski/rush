@@ -1,6 +1,5 @@
 import { useState } from "react"
-
-export default function NotFound() {
+export  function Profile() {
   const [nameOpen, setNameOpen ] = useState(false)
   const [lastnOpen, setlastnOpen ] = useState(false)
   const [emailOpen, setemailOpen ] = useState(false)
