@@ -1,7 +1,7 @@
-import Contactus from "../components/Contactus"
+import ContactUs from "../components/ContactUs"
 export default function NotFound() {
-    return <div>
-      <Contactus></Contactus>
-      <p className="text-bold text-xl"> You clicked a dead end link. </p>
-      </div>
-  }
+  return <div>
+    <ContactUs></ContactUs>
+    <p className="text-bold text-xl"> You clicked a dead end link. </p>
+  </div>
+}
