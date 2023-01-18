@@ -6,7 +6,7 @@ import { SideBarState } from "./components/SideBarToggle";
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Test from './pages/Test'
-import AddProduct from "./components/AddProduct";
+import AddProduct from "./components/AddProducts";
 import EditProduct from "./pages/EditProduct";
 import MyProduct from "./pages/MyProduct";
 import ProductDetail from "./pages/ProductDetail";
@@ -24,7 +24,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/test/:id" element={<Test />} />
                 <Route path="/test" element={<Test />} />
-                <Route path="/add-product" element={<AddProduct />} />
+                <Route path="/add-products" element={<AddProduct />} />
                 <Route path="/edit-product" element={<EditProduct />} />
                 <Route path="/my-product" element={<MyProduct />} />
                 <Route path="/product-detail" element={<ProductDetail />} />

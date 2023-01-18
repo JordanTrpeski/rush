@@ -1,6 +1,6 @@
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
-export default function AddProduct() {
+export default function AddProducts() {
   return ( 
     <div id="popup" className="z-50 fixed w-full flex justify-center inset-0">
       <div className="w-full h-full bg-gray-900 z-0 absolute inset-0" />

@@ -14,7 +14,8 @@ export function HomeSideBar() {
     <div className="">
       <p className="pl-5 "> Add New </p>
       <p className="pl-5 "> Edit Product </p>
-      <p className="pl-5 "> My </p>
+      <p className="pl-5 "> My Products </p>
+      <p className="pl-5 "> Favorite Products </p>
     </div>
   </div>
 }
@@ -24,7 +25,7 @@ export default function Home() {
     <p className="text-[20px] pt-8 pl-20 align-top-left pb-8">Products</p>
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 content-evenly gap-8 justify-items-center items-center w-full">
       {
-        Array.from(Array(100).keys()).map(key => <Product key={key} />)
+        Array.from(Array(0).keys()).map(key => <Product key={key} />)
       }
     </div>
   </NormalPage>

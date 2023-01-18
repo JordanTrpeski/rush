@@ -15,6 +15,7 @@ export default function MyProduct() {
       <p className="pl-5 "> Add New </p>
       <p className="pl-5 "> Edit Product </p>
       <p className="pl-5 "> My Products </p>
+      <p className="pl-5 "> Bookmarked Products </p>
     </div>
   </div>
 }
