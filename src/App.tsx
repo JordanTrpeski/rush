@@ -11,8 +11,6 @@ import MyProduct from "./pages/MyProduct";
 import ProductDetail from "./pages/ProductDetail";
 import ProfilePage from "./pages/Profile";
 
-
-
 function App() {
   return (
     <AccountToggleState>

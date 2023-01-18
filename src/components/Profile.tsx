@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useUserMutation, useUserQuery } from "../hooks/auth-status";
+import { User } from "../sdk/User";
 
 function EditableField({ value, onValueChange, onValueSubmit }: { value: string, onValueSubmit: () => void, onValueChange: (value: string) => void }) {
   const [open, setOpen] = useState(false)
@@ -30,18 +32,38 @@ function PasswordChange() {
   </div>
 }
 
+interface UserProfile {
+  firstName: string,
+  lastName: string,
+  email: string,
+  phoneNumber?: string
+}
+
 function PersonalInfo() {
-  const [firstName, setFirstName] = useState('Jontra')
-  const [lastName, setLastName] = useState('Volta')
-  const [email, setEmail] = useState('lesh@kari.al')
-  const [phoneNumber, setPhoneNumber] = useState('123512')
+  const profile = useUserQuery(user => user.metadata() as Promise<UserProfile>, ['profile'])
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+
+  const {send} = useUserMutation(() => User.update({ email, firstName, lastName, phoneNumber }), [email, firstName, lastName, phoneNumber])
+
+  useEffect(() => {
+    if (profile) {
+      setFirstName(profile.firstName)
+      setLastName(profile.lastName)
+      setEmail(profile.email)
+      setPhoneNumber(profile.phoneNumber ?? '')
+    }
+  }, [profile])
+
 
   return <div>
     <h4 className="text-xl text-gray-900 font-bold">Personal Info</h4>
-    <EditableField value={firstName} onValueChange={setFirstName} onValueSubmit={() => { }}></EditableField>
-    <EditableField value={lastName} onValueChange={setLastName} onValueSubmit={() => { }}></EditableField>
-    <EditableField value={email} onValueChange={setEmail} onValueSubmit={() => { }}></EditableField>
-    <EditableField value={phoneNumber} onValueChange={setPhoneNumber} onValueSubmit={() => { }}></EditableField>
+    <EditableField value={firstName} onValueChange={setFirstName} onValueSubmit={send}></EditableField>
+    <EditableField value={lastName} onValueChange={setLastName} onValueSubmit={send}></EditableField>
+    <EditableField value={email} onValueChange={setEmail} onValueSubmit={send}></EditableField>
+    <EditableField value={phoneNumber} onValueChange={setPhoneNumber} onValueSubmit={send}></EditableField>
   </div>
 }
 
