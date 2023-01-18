@@ -17,6 +17,7 @@ function EditableField({ value, onValueChange, onValueSubmit }: { value: string,
 function PasswordChange() {
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
+  const {send} = useUserMutation(() => User.changePassword(oldPassword, newPassword), [oldPassword, newPassword])
 
   return <div>
     <h4 className="text-xl mt-4 text-gray-900 font-bold">Password</h4>
@@ -26,7 +27,7 @@ function PasswordChange() {
         <input value={oldPassword} onChange={e => setOldPassword(e.target.value)} type="password" className="mb-2 border-solid border-2 border-gray-300 rounded" />
         <div>New Password</div>
         <input value={newPassword} onChange={e => setNewPassword(e.target.value)} type="password" className="mb-2 border-solid border-2 border-gray-300 rounded" />
-        <button type="button" className="btn bg-gray-200 hover:bg-gray-300 px-4 py-2 font-medium rounded">Change</button>
+        <button onClick={send} type="button" className="btn bg-gray-200 hover:bg-gray-300 px-4 py-2 font-medium rounded">Change</button>
       </div>
     </div >
   </div>
