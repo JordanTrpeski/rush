@@ -16,6 +16,8 @@ export const EmptyPage: FC<{ children: ReactNode }> = ({ children }) => {
     <Header />
     <Page>
       {children}
+      <AccountMenu />
+
     </Page>
     <Footer />
     <Register />

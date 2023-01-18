@@ -5,11 +5,11 @@ import { LoginToggleState } from "./components/LoginToggle";
 import { SideBarState } from "./components/SideBarToggle";
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
-import Test from './pages/Test'
 import AddProduct from "./components/AddProducts";
 import EditProduct from "./pages/EditProduct";
 import MyProduct from "./pages/MyProduct";
 import ProductDetail from "./pages/ProductDetail";
+import ProfilePage from "./pages/Profile";
 
 
 
@@ -22,11 +22,10 @@ function App() {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/test/:id" element={<Test />} />
-                <Route path="/test" element={<Test />} />
                 <Route path="/add-products" element={<AddProduct />} />
                 <Route path="/edit-product" element={<EditProduct />} />
                 <Route path="/my-product" element={<MyProduct />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/product-detail" element={<ProductDetail />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
