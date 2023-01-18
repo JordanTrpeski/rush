@@ -38,8 +38,10 @@ interface UserProfile {
   lastName: string,
   email: string,
   phoneNumber?: string
-}
+}  
 
+// todo: add error handling here
+// todo: add error handing in register/login/logout
 function PersonalInfo() {
   const profile = useUserQuery(user => user.metadata() as Promise<UserProfile>, ['profile'])
   const [firstName, setFirstName] = useState('')
