@@ -21,6 +21,7 @@ export function useCallbackWithError<Args extends any[], T>(cb: (...args: Args) 
           hasError: true
         })
       }
+      throw e
     }
   }, [cb])
   return {errorStatus, callback}

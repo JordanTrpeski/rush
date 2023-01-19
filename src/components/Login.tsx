@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useLogin } from "../hooks/auth-status"
+import { useCallbackWithError } from "../hooks/error-handle"
 import { ShowWhenLoginToggled, useLoginToggle } from "./LoginToggle"
 
 export function Login() {
@@ -7,13 +8,15 @@ export function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { send } = useLogin(email, password)
-  
+  const { errorStatus: submitStatus, callback: onSubmit } = useCallbackWithError(send)
+
   return <ShowWhenLoginToggled>
     <div className="fixed w-screen h-screen bg-transparent top-0 left-0" onClick={loginToggle}>
       <div className="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit bg-white drop-shadow shadow-2xl" onClick={e => e.stopPropagation()}>
         <div className="w-full  py-10 px-5 md:px-10">
           <div className="text-center mb-10">
             <h1 className="font-bold text-3xl text-gray-900">Login</h1>
+            { submitStatus.hasError && <div className="my-2 text-red-500">{submitStatus.error}</div> }
           </div>
           <div>
             <div className="flex -mx-3">
@@ -36,7 +39,7 @@ export function Login() {
             </div>
             <div className="flex -mx-3">
               <div className="w-full px-3 mb-5">
-                <button onClick={() => send().then(loginToggle)} className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">Login Now</button>
+                <button onClick={() => onSubmit().then(loginToggle)} className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">Login Now</button>
               </div>
             </div>
           </div>

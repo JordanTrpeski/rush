@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRegister } from "../hooks/auth-status";
+import { useCallbackWithError } from "../hooks/error-handle";
 import { ShowWhenRegisterToggled, useRegisterToggle } from "./RegisterToggle";
 
 export function Register() {
@@ -10,6 +11,7 @@ export function Register() {
   const [password, setPassword] = useState('')
   
   const { send } = useRegister(email, password, { firstName, lastName })
+  const { errorStatus: submitStatus, callback: onSubmit } = useCallbackWithError(send)
 
   return <ShowWhenRegisterToggled>
     <div className="fixed w-screen h-screen bg-transparent top-0 left-0" onClick={registerToggle}>
@@ -18,6 +20,7 @@ export function Register() {
           <div className="text-center mb-10">
             <h1 className="font-bold text-3xl text-gray-900">REGISTER</h1>
             <p>Enter your information to register</p>
+            { submitStatus.hasError && <div className="my-2 text-red-500">{submitStatus.error}</div> }
           </div>
           <div>
             <div className="flex -mx-3">
@@ -56,7 +59,7 @@ export function Register() {
             </div>
             <div className="flex -mx-3">
               <div className="w-full px-3 mb-5">
-                <button onClick={() => send().then(registerToggle)} className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">REGISTER NOW</button>
+                <button onClick={() => onSubmit().then(registerToggle)} className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">REGISTER NOW</button>
               </div>
             </div>
           </div>
