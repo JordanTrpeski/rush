@@ -21,7 +21,7 @@ export function change_global_token(token: string) {
 }
 type RequestObject = {route: string, method?: string, token?: string, body?: BodyInit, contentType?: string}
 type ErrorObject<T> = {status: {code: number, text: string}, response: T, request: RequestObject}
-class ApiError<T> extends Error {
+export class ApiError<T> extends Error {
     public readonly status: {code: number, text: string}
     public readonly response : T
     public readonly request : RequestObject
