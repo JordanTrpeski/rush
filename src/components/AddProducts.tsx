@@ -90,10 +90,12 @@ export default function AddProducts() {
                 </div>
               </form>
               <div className="flex items-center justify-between mt-9">
-                <button className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
-                  Cancel
-                </button>
-                <button className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">Add Product</button>
+                <a href="/" className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                  Cancel 
+                </a>
+                <a href="/" className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">
+                  Add Product
+                  </a>
               </div>
             </div>
           </div>

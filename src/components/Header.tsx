@@ -16,11 +16,8 @@ export function Header({ toggleSideBar }: { toggleSideBar?: () => void }) {
 
     <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
       <div className="text-sm lg:flex-grow">
-        <a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-[#FFFFFF] hover:text-white mr-4">
+        <a href="/" className="block mt-4 lg:inline-block lg:mt-0 text-[#FFFFFF] hover:text-white mr-4">
           Home
-        </a>
-        <a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-[#CCCCCC] hover:text-white mr-4">
-          Products
         </a>
       </div>
       <div className="cursor-pointer" onClick={toggleAccount}>

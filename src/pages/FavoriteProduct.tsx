@@ -1,7 +1,7 @@
 import { Product } from "../components/Product"
 import { NormalPage } from "../components/Layout"
 import { HomeSideBar } from "./Home"
-export default function MyProduct() {
+export default function FavoriteProduct() {
   return <div>
   <NormalPage sideBar={<HomeSideBar/>}>
     <p className="text-[20px] pt-8 pl-20 align-top-left pb-8">Products</p>

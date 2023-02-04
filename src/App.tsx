@@ -10,6 +10,10 @@ import EditProduct from "./pages/EditProduct";
 import MyProduct from "./pages/MyProduct";
 import ProductDetail from "./pages/ProductDetail";
 import ProfilePage from "./pages/Profile";
+import FavoriteProduct from "./pages/FavoriteProduct";
+import ContactUs from "./pages/ContactUs";
+import Warranty from "./pages/Warranty";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   return (
@@ -25,6 +29,10 @@ function App() {
                 <Route path="/my-product" element={<MyProduct />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/product-detail" element={<ProductDetail />} />
+                <Route path="/favorite-product" element={<FavoriteProduct />} />
+                <Route path="/contact-us" element={<ContactUs />} />
+                <Route path="/warranty" element={<Warranty />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

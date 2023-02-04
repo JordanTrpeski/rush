@@ -23,13 +23,13 @@ export function Footer() {
           <h2 className="mb-6 text-sm font-bold text-[16px] text-[#AAAAAA] uppercase">Trade safely!</h2>
           <ul className="text-[#1451B8] ">
             <li className="mb-1">
-              <a href="/" className="hover:underline font-medium">Warranty</a>
+              <a href="/warranty" className="hover:underline font-medium">Warranty</a>
             </li>
             <li className="mb-1">
-              <a href="/" className="hover:underline font-medium">Privacy policy</a>
+              <a href="/privacy-policy" className="hover:underline font-medium">Privacy policy</a>
             </li>
             <li className="mb-1">
-              <a href="/" className="hover:underline font-medium">Customer support</a>
+              <a href="/contact-us" className="hover:underline font-medium">Customer support</a>
             </li>
           </ul>
         </div>
