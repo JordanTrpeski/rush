@@ -1,17 +1,16 @@
-import Product from "../components/Product"
 import { NormalPage } from "../components/Layout"
-import { Filter } from "../components/Filter"
+import { Filter, useFilteredProducts } from "../components/Filter"
 import { Pagination } from "../components/Pagination"
 import { useNavigate } from "react-router-dom"
 import { useNewProductToggle } from "../components/AddNewProductToggle"
 import { useEditProductToggle } from "../components/EditProductToggle"
 import { useIsLoggedIn } from "../hooks/auth-status"
+import Product from "../components/Product"
 export function HomeSideBar({ canEditProduct }: { canEditProduct?: boolean }) {
   const navigate = useNavigate()
   const newProductToggle = useNewProductToggle()
   const editProductToggle = useEditProductToggle()
   const loggedIn = useIsLoggedIn()
-
   return <div>
     <div onClick={() => navigate('/profile')} className="mb-0 flex cursor-pointer justify-left p-1">
       <img src="/svg/house.svg" alt="general settings" className="w-5 h-5" />
@@ -34,18 +33,23 @@ export function HomeSideBar({ canEditProduct }: { canEditProduct?: boolean }) {
   </div>
 }
 
+// todo: return page count from backend
+// todo: implement pagination
+
 export default function Home() {
+  const products = useFilteredProducts()
   return <NormalPage sideBar={<HomeSideBar />}>
     <div className="flex flex-row  justify-center items-center pt-10 pb-5 ">
-      <Filter></Filter>
+      <Filter />
     </div>
     <p className="text-[20px] pt-8 pl-20 align-top-left pb-8">Products</p>
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 content-evenly gap-8 justify-items-center items-center w-full">
       {
+        products?.map((product, key) => <Product product={product} key={key} />)
       }
     </div>
     <div>
-      <Pagination></Pagination>
+      <Pagination />
     </div>
   </NormalPage>
 }

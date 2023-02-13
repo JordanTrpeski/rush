@@ -24,7 +24,7 @@ function errorToSaneObject(e: any) {
 
 export default function AddProducts() {
   const [title, setTitle] = useState('')
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState('Vehicle')
   const [price, setPrice] = useState(0)
   const [description, setDescription] = useState('')
   const { images, addImage, removeImage } = useImageList()

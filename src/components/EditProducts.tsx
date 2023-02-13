@@ -29,7 +29,7 @@ function errorToSaneObject(e: any) {
 
 function EditProductInner({ product }: { product: ReturnType<typeof useProduct> }) {
   const [title, setTitle] = useState(product?.data?.metadata.title ?? '')
-  const [category, setCategory] = useState(product?.data?.metadata.category ?? '')
+  const [category, setCategory] = useState(product?.data?.metadata.category ?? 'Vehicle')
   const [price, setPrice] = useState(product?.data?.metadata.price ?? 0)
   const [description, setDescription] = useState(product?.data?.metadata.description ?? '')
   const { images, addImage, removeImage } = useImageList(product?.images?.map(image => image.url()))
