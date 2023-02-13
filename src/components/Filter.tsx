@@ -32,11 +32,16 @@ export function useSearch() {
 	return useContext(FilterContext).search
 }
 
-export const PageSize = 20
+export const PageSize = 1
 
 export function useFilteredProducts() {
 	const search = useSearch()
-	return useQuery(JSON.stringify(search), () => Product.query(search).then(items => items.map(item => Product.fromId(item.id!)))).data
+	return useQuery(JSON.stringify(search), () => Product.query(search).then(items => {
+		const products = items.map(item => Product.fromId(item.id!))
+		const total = items.length === 0 ? 0 : items[0].full_count
+		const maxPage = Math.ceil(total / PageSize)
+		return { products, maxPage }
+	})).data
 }
 
 export function Filter() {
@@ -60,7 +65,7 @@ export function Filter() {
 				...(timeOrder !== 'any' ? [{ field: 'created_at', direction: timeOrder } as SortItem] : [])
 			],
 			page,
-			page_size: PageSize + 1
+			page_size: PageSize
 		}
 		setSearch(search)
 	}, [title, timeOrder, category, priceOrder, page, queryClient, setSearch])

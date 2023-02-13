@@ -33,11 +33,8 @@ export function HomeSideBar({ canEditProduct }: { canEditProduct?: boolean }) {
   </div>
 }
 
-// todo: return page count from backend
-// todo: implement pagination
-
 export default function Home() {
-  const products = useFilteredProducts()
+  const result = useFilteredProducts()
   return <NormalPage sideBar={<HomeSideBar />}>
     <div className="flex flex-row  justify-center items-center pt-10 pb-5 ">
       <Filter />
@@ -45,11 +42,11 @@ export default function Home() {
     <p className="text-[20px] pt-8 pl-20 align-top-left pb-8">Products</p>
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 content-evenly gap-8 justify-items-center items-center w-full">
       {
-        products?.map((product, key) => <Product product={product} key={key} />)
+        result?.products.map((product, key) => <Product product={product} key={key} />)
       }
     </div>
     <div>
-      <Pagination />
+      <Pagination maxPage={result?.maxPage ?? 1} />
     </div>
   </NormalPage>
 }
