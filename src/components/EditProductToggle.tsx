@@ -1,10 +1,11 @@
-import { createContext, FC, ReactNode, useState, useContext } from "react"
+import { createContext, FC, ReactNode, useState, useContext, useCallback } from "react"
 
 const EditProductToggle = createContext({ editProductToggled: false, toggleEditProduct: () => { } })
 
 export const EditProductToggleState: FC<{ children: ReactNode }> = ({ children }) => {
   const [toggleStatus, setToggleStatus] = useState(false)
-  return <EditProductToggle.Provider value={{ editProductToggled: toggleStatus, toggleEditProduct: () => setToggleStatus(status => !status) }}>
+  const callback = useCallback(() => setToggleStatus(status => !status), [])
+  return <EditProductToggle.Provider value={{ editProductToggled: toggleStatus, toggleEditProduct: callback }}>
     {children}
   </EditProductToggle.Provider>
 }

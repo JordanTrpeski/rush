@@ -1,15 +1,98 @@
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
-export default function EditProducts() {
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEditProduct, useProduct, useRemove } from "../hooks/api/products";
+import { useEditProductToggle } from "./EditProductToggle";
+
+function useImageList(d: string[] = []) {
+  const [images, setImages] = useState<string[]>(d)
+
+  const addImage = useCallback((file: Blob) => {
+    setImages(oldImages => [...oldImages, URL.createObjectURL(file)])
+  }, [])
+
+  const removeImage = useCallback((imageUrl: string) => {
+    setImages(images => images.filter(image => image !== imageUrl))
+  }, [])
+
+  return { images, addImage, removeImage }
+}
+
+function errorToSaneObject(e: any) {
+  if (e instanceof Error) {
+    const { cause, message, name, stack } = e
+    return { cause, message, name, stack }
+  }
+  return e
+}
+
+function EditProductInner({ product }: { product: ReturnType<typeof useProduct> }) {
+  const [title, setTitle] = useState(product?.data?.metadata.title ?? '')
+  const [category, setCategory] = useState(product?.data?.metadata.category ?? '')
+  const [price, setPrice] = useState(product?.data?.metadata.price ?? 0)
+  const [description, setDescription] = useState(product?.data?.metadata.description ?? '')
+  const { images, addImage, removeImage } = useImageList(product?.images?.map(image => image.url()))
+  const fileRef = useRef<HTMLInputElement>(null)
+  const editProductToggle = useEditProductToggle()
+  const navigate = useNavigate()
+  const onAddImageButtonClick = useCallback(() => {
+    fileRef.current?.click()
+  }, [])
+
+  const deleteProduct = useRemove(product?.product, () => {
+    navigate('/my-product')
+    editProductToggle()
+  })
+
+  const { send, isLoading, result, hasError, hasSentRequest, error } = useEditProduct(product?.product, title, images, price, category, description)
+
+  useEffect(() => {
+    if (hasSentRequest && !isLoading && !hasError) {
+      editProductToggle()
+      window.document.location = `/products/${result?.id}`
+    }
+  }, [hasSentRequest, isLoading, hasError, result, editProductToggle])
+
+  if (isLoading) {
+    return <div className="w-screen container">
+      <div className="flex items-center justify-center h-full w-full">
+        <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
+          <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
+            <p className="text-base font-semibold">Sending...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  if (hasError) {
+    return <div className="w-screen container">
+      <div className="flex items-center justify-center h-full w-full">
+        <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
+          <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
+            <p className="text-base font-semibold">An error has occured</p>
+          </div>
+          <div className="p-4">
+            <p>Please contact us and send us this error message:</p>
+            <p className="min-h-[250px] max-h-[250px] text-red-900 text-xs break-all pt-2 font-mono">{JSON.stringify({ error: errorToSaneObject(error), hasSentRequest, result, hasError, isLoading })}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+
+
   return (
     <div className="w-screen container">
       <div className="flex items-center justify-center h-full w-full">
         <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
           <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-            <p className="text-base font-semibold">Edit Product</p>
+            <p className="text-base font-semibold">Add New Product</p>
           </div>
           <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
-            <CarouselProvider naturalSlideWidth={100} naturalSlideHeight={100} totalSlides={3} className="flex items-center justify-center ">
+            <CarouselProvider naturalSlideWidth={100} naturalSlideHeight={100} totalSlides={images.length} className="flex items-center justify-center ">
               <div className="flex items-center">
                 <ButtonBack aria-label="slide back" className="focus:outline-none focus:ring-2 pr-10">
                   <svg className="w-10 h-10 lg:w-16 lg:h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,36 +103,15 @@ export default function EditProducts() {
               <div className="slider">
                 <div className="slide-ana lg:relative">
                   <Slider className="flex-grow">
-                    <Slide index={0}>
-                      <div className="w-40 h-40 p-16 bg-gray-100 rounded-md flex items-center justify-center">
-                        <svg width={36} height={36} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M22.5 12H22.515" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M25.5 6H10.5C8.01472 6 6 8.01472 6 10.5V25.5C6 27.9853 8.01472 30 10.5 30H25.5C27.9853 30 30 27.9853 30 25.5V10.5C30 8.01472 27.9853 6 25.5 6Z" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M6 22.4999L12 16.4999C12.6841 15.8417 13.4601 15.4951 14.25 15.4951C15.0399 15.4951 15.8159 15.8417 16.5 16.4999L24 23.9999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M21 20.9999L22.5 19.4999C23.1841 18.8417 23.9601 18.4951 24.75 18.4951C25.5399 18.4951 26.3159 18.8417 27 19.4999L30 22.4999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </Slide>
-                    <Slide index={1}>
-                      <div className="w-40 h-40 p-16 bg-gray-100 rounded-md flex items-center justify-center">
-                        <svg width={36} height={36} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M22.5 12H22.515" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M25.5 6H10.5C8.01472 6 6 8.01472 6 10.5V25.5C6 27.9853 8.01472 30 10.5 30H25.5C27.9853 30 30 27.9853 30 25.5V10.5C30 8.01472 27.9853 6 25.5 6Z" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M6 22.4999L12 16.4999C12.6841 15.8417 13.4601 15.4951 14.25 15.4951C15.0399 15.4951 15.8159 15.8417 16.5 16.4999L24 23.9999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M21 20.9999L22.5 19.4999C23.1841 18.8417 23.9601 18.4951 24.75 18.4951C25.5399 18.4951 26.3159 18.8417 27 19.4999L30 22.4999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </Slide>
-                    <Slide index={2}>
-                      <div className="w-40 h-40 p-16 bg-gray-100 rounded-md flex items-center justify-center">
-                        <svg width={36} height={36} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M22.5 12H22.515" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M25.5 6H10.5C8.01472 6 6 8.01472 6 10.5V25.5C6 27.9853 8.01472 30 10.5 30H25.5C27.9853 30 30 27.9853 30 25.5V10.5C30 8.01472 27.9853 6 25.5 6Z" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M6 22.4999L12 16.4999C12.6841 15.8417 13.4601 15.4951 14.25 15.4951C15.0399 15.4951 15.8159 15.8417 16.5 16.4999L24 23.9999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M21 20.9999L22.5 19.4999C23.1841 18.8417 23.9601 18.4951 24.75 18.4951C25.5399 18.4951 26.3159 18.8417 27 19.4999L30 22.4999" stroke="#94A3B8" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </Slide>
+                    {
+                      images.map((image, idx) => (
+                        <Slide key={idx} index={idx}>
+                          <div onClick={() => removeImage(image)} className="w-40 cursor-no-drop h-40 bg-gray-100 rounded-md flex items-center justify-center">
+                            <img src={image} alt="product" />
+                          </div>
+                        </Slide>
+                      ))
+                    }
                   </Slider>
                 </div>
               </div>
@@ -61,15 +123,20 @@ export default function EditProducts() {
                 </ButtonNext>
               </div>
             </CarouselProvider>
-            <form className="mt-11">
+            <div className="mt-11">
               <div className="flex items-center space-x-9">
-                <input placeholder="Old Title" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                <input placeholder="Old Location" type="text" min={0} className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                <input ref={fileRef} onChange={e => {
+                  for (const file of e.target.files ?? []) {
+                    addImage(file)
+                  }
+                }} type="file" className="hidden" />
+                <button onClick={onAddImageButtonClick} className="w-1/2 focus:outline-none hover:bg-gray-200 placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Add Image</button>
               </div>
               <div className="flex items-center space-x-9 mt-8">
-                <input placeholder="Old Phone Number" type="number" className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                <input onChange={e => setPrice(parseFloat(e.target.value))} value={price} placeholder="Price" type="number" className="w-1/2 font-mono focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                 <div className="w-1/2 bg-white border rounded border-gray-200 py-2.5 px-3">
-                  <select defaultValue={"Category"} className="text-sm text-gray-500 w-full focus:outline-none">
+                  <select value={category} onChange={e => setCategory(e.target.value)} className="text-sm text-gray-500 w-full focus:outline-none">
                     <option>Vehicle</option>
                     <option>Electronics</option>
                     <option>Accommodation</option>
@@ -81,24 +148,23 @@ export default function EditProducts() {
                 </div>
               </div>
               <div className="mt-8">
-                <textarea placeholder="Old Description" className="py-3 pl-3 overflow-y-auto h-24 border rounded border-gray-200 w-full resize-none focus:outline-none" defaultValue={""} />
+                <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Description" className="py-3 pl-3 overflow-y-auto h-24 border rounded border-gray-200 w-full resize-none focus:outline-none" />
               </div>
-            </form>
-            <div className="flex items-center justify-between mt-9">
-              <a href="/" className="px-6 py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
-                Cancel
-              </a>
-              <a href="/" className="px-6 py-3 bg-gray-700 hover:bg-gray-900 shadow rounded text-sm text-white">
-                Delete
-              </a>
-              <a href="/" className="px-6 py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">
-                Edit Product
-              </a>
             </div>
-
+            <div className="flex items-center justify-between mt-9">
+              <div onClick={editProductToggle} className="px-6 cursor-pointer py-3 bg-gray-400 hover:bg-gray-500 shadow rounded text-sm text-white">
+                Cancel
+              </div>
+              <div onClick={deleteProduct} className="px-6 py-3 cursor-pointer bg-gray-700 hover:bg-gray-900 shadow rounded text-sm text-white">
+                Delete
+              </div>
+              <div onClick={send} className="px-6 cursor-pointer py-3 bg-indigo-700 hover:bg-opacity-80 shadow rounded text-sm text-white">
+                Edit Product
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </div >
       <style>{`
                 .slider {
                     width: 200px;
@@ -125,6 +191,20 @@ export default function EditProducts() {
                     }
                 }
             `}</style>
-    </div>
+    </div >
   );
+}
+
+export default function EditProducts() {
+
+  /* todo: do this outside the component for correct loading */
+  const { id } = useParams()
+  const product = useProduct(id ?? '')
+
+  if (product) {
+    return <EditProductInner product={product} />
+  }
+
+  return <></>
+
 }

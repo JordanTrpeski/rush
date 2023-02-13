@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import { User } from "../../sdk/User";
 import { useCanvas } from "../../components/Canvas";
 import { ProductPrivateMetadataModel } from "../../api/products";
+import { useCallback } from "react";
 
 export type ShoppingProduct = {
     title: string,
@@ -17,7 +18,7 @@ export type ShoppingProduct = {
 async function getProduct(id: string) {
     try {
         if (id.length === 36) {
-            const product = Product.fromId(id)
+            const product = Product.fromIdPrivate(id)
             return { product, data: await product.metadata(), images: await product.images() }
         } else {
             const product = Product.fromSlug(id)
@@ -26,7 +27,7 @@ async function getProduct(id: string) {
     } catch {
         try {
             if (id.length === 36) {
-                const product = Product.fromIdPrivate(id)
+                const product = Product.fromId(id)
                 return { product, data: await product.metadata(), images: await product.images() }
             } else {
                 const product = Product.fromSlug(id)
@@ -91,6 +92,51 @@ export function useCurrentProducts() {
 
 export function useFavorites() {
     return useQuery(['favorte-products'], getFavoriteProducts).data
+}
+
+export function useRemove<T, R>(item?: { remove: () => Promise<T> }, chain?: (p: T) => R) {
+    return useCallback(() => item?.remove().then(chain), [item, chain])
+}
+
+export function useEditProduct(product: Product | undefined, title: string, images: string[], price: number, category: string, description: string) {
+    const canvas = useCanvas()
+    return useUserMutation(async () => {
+        const productModel: ShoppingProduct = {
+            title,
+            price,
+            category,
+            description
+        }
+
+        if (!product) {
+            throw new TypeError('Invalid product specified')
+        }
+
+        await product.update(productModel)
+        const oldImages = await product.images()
+        for (const image of oldImages.filter(image => !images.includes(image.url()))) {
+            await image.remove()
+        }
+        
+        const oldImageUrls = oldImages.map(x => x.url())
+        const imageResults: ImageAPI.Image[] = []
+        for (const image of images.filter(image => !oldImageUrls.includes(image))) {
+            imageResults.push(await fetch(image)
+                .then(r => r.blob())
+                .then(b => convertToPng(b, canvas))
+                .then(b => product.uploadImage(b)))
+        }
+
+        if (imageResults.length) {
+            await product.update({
+                ...productModel,
+                primaryImage: imageResults[0].url()
+            })
+        }
+
+        await product.publish()
+        return { slug: product.id().slug, id: product.id().productId }
+    }, [title, category, price, description, images, product])
 }
 
 export function useAddProduct(title: string, images: string[], price: number, category: string, description: string) {

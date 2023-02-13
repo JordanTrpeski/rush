@@ -9,8 +9,8 @@ export default function ProductDetail() {
   const { id } = useParams()
   const product = useProduct(id ?? '')
   return <div>
-    <NormalPage sideBar={<HomeSideBar />}>
-      <div className="bg-white-">
+    <NormalPage sideBar={<HomeSideBar canEditProduct={product?.product?.id().authorized} />}>
+      <div className="bg-white">
         <div className="2xl:container 2xl:mx-auto md:py-12 lg:px-20 md:px-6 py-9 px-4">
           <div id="Sus" className="lg:p-10 md:p-6 p-4 bg-white">
             <div className="flex justify-end">

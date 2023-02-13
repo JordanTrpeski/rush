@@ -5,10 +5,12 @@ import { Pagination } from "../components/Pagination"
 import { useNavigate } from "react-router-dom"
 import { useNewProductToggle } from "../components/AddNewProductToggle"
 import { useEditProductToggle } from "../components/EditProductToggle"
-export function HomeSideBar() {
+import { useIsLoggedIn } from "../hooks/auth-status"
+export function HomeSideBar({ canEditProduct }: { canEditProduct?: boolean }) {
   const navigate = useNavigate()
   const newProductToggle = useNewProductToggle()
   const editProductToggle = useEditProductToggle()
+  const loggedIn = useIsLoggedIn()
 
   return <div>
     <div onClick={() => navigate('/profile')} className="mb-0 flex cursor-pointer justify-left p-1">
@@ -21,9 +23,13 @@ export function HomeSideBar() {
     </div>
     <div className="flex-wrap">
       <div onClick={newProductToggle} className="flex cursor-pointer pl-8">Add New</div>
-      <div onClick={editProductToggle} className="flex cursor-pointer pl-8">Edit Product</div>
-      <a href="my-product" className="flex pl-8">My Products</a>
-      <a href="favorite-product" className="flex pl-8">Favorite Product</a>
+      {canEditProduct && <div onClick={editProductToggle} className="flex cursor-pointer pl-8">Edit Product</div>}
+      {
+        loggedIn && <>
+          <div onClick={() => navigate('/my-product')} className="flex cursor-pointer pl-8">My Products</div>
+          <div onClick={() => navigate('/favorite-product')} className="flex cursor-pointer pl-8">Favorite Products</div>
+        </>
+      }
     </div>
   </div>
 }
