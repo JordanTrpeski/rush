@@ -1,4 +1,4 @@
-import { Product } from "../components/Product"
+import Product from "../components/Product"
 import { NormalPage } from "../components/Layout"
 import { Filter } from "../components/Filter"
 import { Pagination } from "../components/Pagination"

@@ -1,9 +1,10 @@
 import { Product } from "../../sdk/Product";
 import * as ImageAPI from "../../sdk/Image";
-import { useUserMutation, useUserQuery, } from "../auth-status";
+import { useUserMutation } from "../auth-status";
 import { useQuery } from "react-query";
 import { User } from "../../sdk/User";
 import { useCanvas } from "../../components/Canvas";
+import { ProductPrivateMetadataModel } from "../../api/products";
 
 export type ShoppingProduct = {
     title: string,
@@ -72,12 +73,24 @@ async function convertToPng(src: Blob, canvas?: HTMLCanvasElement | null): Promi
     return await fetch(canvas.toDataURL()).then(r => r.blob())
 }
 
+
+export type ShortProductData = { metadata: ProductPrivateMetadataModel, product: Product }
 async function getCurrentProducts() {
-    return Promise.all((await User.products()).map(product => product.id().productId!).map(getProduct))
+    return await User.products()
 }
 
+async function getFavoriteProducts() {
+    return (await User.favorites()).map(x => x.product())
+}
+
+
+export type ProductData = Awaited<ReturnType<typeof getProduct>>
 export function useCurrentProducts() {
-    return useUserQuery(getCurrentProducts, [])
+    return useQuery(['current-products'], getCurrentProducts).data
+}
+
+export function useFavorites() {
+    return useQuery(['favorte-products'], getFavoriteProducts).data
 }
 
 export function useAddProduct(title: string, images: string[], price: number, category: string, description: string) {
