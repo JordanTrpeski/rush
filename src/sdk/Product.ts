@@ -29,7 +29,7 @@ export class Product implements ApiObject<{productId?: string, slug?: string, au
             method: 'add_product',
             pass: params(product)
         })
-        return Product.fromId(productId)
+        return Product.fromIdPrivate(productId)
     }
 
     public async update(product: ProductModel) {

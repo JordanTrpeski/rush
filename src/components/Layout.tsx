@@ -1,9 +1,11 @@
 import { FC, ReactNode } from "react"
 import createNamedDiv from "../utils/createNamedDiv"
 import AccountMenu from "./AccountMenu"
+import EditProduct from "./EditProduct"
 import { Footer } from "./Footer"
 import { Header } from "./Header"
 import { Login } from "./Login"
+import NewProduct from "./NewProduct"
 import { Register } from "./Register"
 import { SideBar } from "./SideBar"
 import { HideWhenSideBarToggled, useSideBarToggle } from "./SideBarToggle"
@@ -17,11 +19,12 @@ export const EmptyPage: FC<{ children: ReactNode }> = ({ children }) => {
     <Page>
       {children}
       <AccountMenu />
-
     </Page>
     <Footer />
     <Register />
-    <Login/>
+    <Login />
+    <NewProduct />
+    <EditProduct />
   </Layout>
 }
 
@@ -40,6 +43,8 @@ export const NormalPage: FC<{ children: ReactNode, sideBar: ReactNode }> = ({ ch
     </Page>
     <Footer />
     <Register />
-    <Login/>
+    <Login />
+    <NewProduct />
+    <EditProduct />
   </Layout>
 }

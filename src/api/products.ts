@@ -7,7 +7,11 @@ export type ProductModel = {
 export type ProductPrivateMetadataModel = {
     metadata: ProductModel,
     private: boolean,
-    slug: string
+    slug: string,
+    owner_id?: string,
+    id?: string,
+    updated_at?: string,
+    created_at?: string,
 }
 
 export type ImageUploadModel = {
