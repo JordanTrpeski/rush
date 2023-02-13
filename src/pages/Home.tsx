@@ -12,10 +12,12 @@ export function HomeSideBar({ canEditProduct }: { canEditProduct?: boolean }) {
   const editProductToggle = useEditProductToggle()
   const loggedIn = useIsLoggedIn()
   return <div>
-    <div onClick={() => navigate('/profile')} className="mb-0 flex cursor-pointer justify-left p-1">
-      <img src="/svg/house.svg" alt="general settings" className="w-5 h-5" />
-      <div className="pl-2"> General Settings </div>
-    </div>
+    {
+      loggedIn && <div onClick={() => navigate('/profile')} className="mb-0 flex cursor-pointer justify-left p-1">
+        <img src="/svg/house.svg" alt="general settings" className="w-5 h-5" />
+        <div className="pl-2"> General Settings </div>
+      </div>
+    }
     <div onClick={() => navigate('/')} className="mb-0 cursor-pointer flex justify-left p-1 ">
       <img alt="products" src="/svg/products.svg" className="w-5 h-5" />
       <p className="pl-2"> Products </p>
