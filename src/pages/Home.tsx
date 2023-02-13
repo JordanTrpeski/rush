@@ -21,7 +21,9 @@ export function HomeSideBar({ canEditProduct }: { canEditProduct?: boolean }) {
       <p className="pl-2"> Products </p>
     </div>
     <div className="flex-wrap">
-      <div onClick={newProductToggle} className="flex cursor-pointer pl-8">Add New</div>
+      {
+        loggedIn && <div onClick={newProductToggle} className="flex cursor-pointer pl-8">Add New</div>
+      }
       {canEditProduct && <div onClick={editProductToggle} className="flex cursor-pointer pl-8">Edit Product</div>}
       {
         loggedIn && <>
