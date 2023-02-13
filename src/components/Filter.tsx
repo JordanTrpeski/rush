@@ -32,7 +32,7 @@ export function useSearch() {
 	return useContext(FilterContext).search
 }
 
-export const PageSize = 1
+export const PageSize = 12
 
 export function useFilteredProducts() {
 	const search = useSearch()

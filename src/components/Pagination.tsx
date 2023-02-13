@@ -45,8 +45,6 @@ function generateArray(maxPage: number, currentPage: number, relativePage: numbe
 export function Pagination({ maxPage }: { maxPage: number }) {
     const currentPage = usePage()
     const setPage = useSetPage()
-    maxPage = 10
-
     return <div className="flex items-center justify-center py-10 lg:px-0 sm:px-6 px-4">
         <div className="lg:w-3/5 w-full  flex items-center justify-between border-t border-gray-900 dark:border-gray-700">
             <NavContainer onClick={() => setPage(currentPage - 1)} active={currentPage > 0}>
