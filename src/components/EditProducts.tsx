@@ -196,8 +196,6 @@ function EditProductInner({ product }: { product: ReturnType<typeof useProduct> 
 }
 
 export default function EditProducts() {
-
-  /* todo: do this outside the component for correct loading */
   const { id } = useParams()
   const product = useProduct(id ?? '')
 

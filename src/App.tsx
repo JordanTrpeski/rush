@@ -15,36 +15,39 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { NewProductToggleState } from "./components/AddNewProductToggle";
 import { EditProductToggleState } from "./components/EditProductToggle";
 import { CanvasProvider } from "./components/Canvas";
+import { FavoriteProvider } from "./components/Product";
 
 
 function App() {
   return (
     <CanvasProvider>
-      <EditProductToggleState>
-        <NewProductToggleState>
-          <AccountToggleState>
-            <RegisterToggleState>
-              <LoginToggleState>
-                <SideBarState>
-                  <BrowserRouter>
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/my-product" element={<MyProduct />} />
-                      <Route path="/profile" element={<ProfilePage />} />
-                      <Route path="/products/:id" element={<ProductDetail />} />
-                      <Route path="/favorite-product" element={<FavoriteProduct />} />
-                      <Route path="/contact-us" element={<ContactUs />} />
-                      <Route path="/warranty" element={<Warranty />} />
-                      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </BrowserRouter>
-                </SideBarState>
-              </LoginToggleState>
-            </RegisterToggleState>
-          </AccountToggleState>
-        </NewProductToggleState>
-      </EditProductToggleState>
+      <FavoriteProvider>
+        <EditProductToggleState>
+          <NewProductToggleState>
+            <AccountToggleState>
+              <RegisterToggleState>
+                <LoginToggleState>
+                  <SideBarState>
+                    <BrowserRouter>
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/my-product" element={<MyProduct />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/products/:id" element={<ProductDetail />} />
+                        <Route path="/favorite-product" element={<FavoriteProduct />} />
+                        <Route path="/contact-us" element={<ContactUs />} />
+                        <Route path="/warranty" element={<Warranty />} />
+                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </BrowserRouter>
+                  </SideBarState>
+                </LoginToggleState>
+              </RegisterToggleState>
+            </AccountToggleState>
+          </NewProductToggleState>
+        </EditProductToggleState>
+      </FavoriteProvider>
     </CanvasProvider>
   )
 }
